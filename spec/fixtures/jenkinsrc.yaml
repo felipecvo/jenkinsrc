@@ -1,0 +1,34 @@
+--- 
+name: Jenkinsrc
+server: 
+  url: http://jenkins.com/
+  plugins:
+  - rvm
+jobs: 
+- name: build
+  description: Build project
+  triggers: 
+  - type: scm
+    spec: * * * * *
+  builders: 
+  - type: shell
+    command: "rake build"
+  build_wrappers: 
+  - plugin: versionnumber
+    tag: org.jvnet.hudson.tools.versionnumber.VersionNumberBuilder
+    version_number_string: ${BUILD_DATA_FORMATTED}
+    environment_variable_name: BUILD_VERSION
+    o_builds_today: -1
+    o_builds_this_month: -1
+    o_builds_this_year: -1
+    o_builds_all_time: -1
+    skip_failed_builds: true
+    use_as_build_display_name: false
+  publishers: 
+  - name: hudson.tasks.ArtifactArchiver
+    artifacts: *_TAG
+    latestOnly: false
+- name: test
+  builders: 
+  - type: shell
+    command: "rake test"

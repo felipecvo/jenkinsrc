@@ -1,0 +1,21 @@
+---
+:name: jenkinsrc-code-pull
+:description: First job in Jenkinsrcs pipeline.
+:log_rotator:
+  num_to_keep: 5
+:scm:
+  :plugin: GitSCM
+  :remote_url: git@github.com:felipecvo/jenkinsrc.git
+  :branch: master
+:build_triggers:
+  :poll_scm: '*/5 * * * *'
+:build:
+  :shell: make build
+:post_build:
+  :parameterizedtrigger:
+    :build_trigger:
+      :params:
+        :gitrevisionbuild: true
+        :filebuildparam: $WORKSPACE/STRUCTURE_REVISION
+      :projects_to_build:
+      - jenkinsrc-unit-tests
