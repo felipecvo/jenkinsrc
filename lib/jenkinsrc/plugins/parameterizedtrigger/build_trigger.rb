@@ -11,6 +11,16 @@ module Jenkinsrc
             @triggers << BuildTriggerConfig.new(child.at_xpath('hudson.plugins.parameterizedtrigger.BuildTriggerConfig'))
           end
         end
+
+        def to_xml(builder)
+          builder.send('hudson.plugins.parameterizedtrigger.BuildTrigger') do |xml|
+            xml.configs do
+              self.triggers.each do |trigger|
+                trigger.to_xml(xml)
+              end
+            end
+          end
+        end
       end
     end
   end

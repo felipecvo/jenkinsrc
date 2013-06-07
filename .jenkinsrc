@@ -1,5 +1,6 @@
---- !ruby/object:Jenkinsrc::Project
-name: Jenkinsrc
-server: !ruby/object:Jenkinsrc::Server
-  url: http://jenkins.com/
+--- 
 jobs: []
+
+name: Jenkinsrc
+server: 
+  url: http://jenkins.com/

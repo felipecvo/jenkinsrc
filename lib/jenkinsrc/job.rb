@@ -1,20 +1,23 @@
 module Jenkinsrc
   class Job
-    attr_accessor :name, :description, :log_rotator, :scm, :disabled, :block_build_whn_downstream_building,
-      :block_build_whn_upstream_building, :triggers, :concurrent_build, :builders, :publishers
+    include Jenkinsrc::XML::JobConverter
+
+    attr_accessor :name, :description, :log_rotator, :scm, :disabled, :block_build_when_downstream_building,
+      :block_build_when_upstream_building, :triggers, :concurrent_build, :builders, :publishers, :build_wrappers
 
     def initialize
       @triggers = []
       @builders = []
       @publishers = []
+      @build_wrappers = []
     end
 
-    def block_build_whn_downstream_building?
-      @block_build_whn_downstream_building
+    def block_build_when_downstream_building?
+      @block_build_when_downstream_building == true
     end
 
-    def block_build_whn_upstream_building?
-      @block_build_whn_upstream_building
+    def block_build_when_upstream_building?
+      @block_build_when_upstream_building == true
     end
 
     def disabled?
@@ -22,7 +25,7 @@ module Jenkinsrc
     end
 
     def concurrent_build?
-      @concurrent_build
+      @concurrent_build == true
     end
 
     def to_yaml

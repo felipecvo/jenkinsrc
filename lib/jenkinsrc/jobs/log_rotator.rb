@@ -1,6 +1,8 @@
 module Jenkinsrc
   module Jobs
     class LogRotator
+      include Jenkinsrc::XML::LogRotatorConverter
+
       attr_accessor :days_to_keep, :num_to_keep, :artifact_days_to_keep, :artifact_num_to_keep
 
       def initialize(hash = {})

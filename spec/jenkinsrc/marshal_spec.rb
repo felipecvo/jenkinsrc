@@ -37,8 +37,8 @@ describe Jenkinsrc::Marshal do
     its(:description) { should eq "First job in Jenkinsrc's pipeline. Very simple, just pulls the git repository every 5 minutes and trigger the pipeline when new code was pushed." }
     its(:log_rotator) { should eq Jenkinsrc::Jobs::LogRotator.new(:days_to_keep => -1, :num_to_keep => 5, :artifact_days_to_keep => -1, :artifact_num_to_keep => -1) }
     its(:disabled?) { should be_true }
-    its(:block_build_whn_downstream_building?) { should be_false }
-    its(:block_build_whn_upstream_building?) { should be_false }
+    its(:block_build_when_downstream_building?) { should be_false }
+    its(:block_build_when_upstream_building?) { should be_false }
     its(:concurrent_build?) { should be_false }
 
     context "parse scm" do
@@ -65,7 +65,7 @@ describe Jenkinsrc::Marshal do
 
       context "shell task" do
         subject { job.builders.first }
-        it { should be_a Jenkinsrc::Jobs::ShellTask }
+        it { should be_a Jenkinsrc::Tasks::Shell }
         its(:command) { should match /git clone/ }
       end
     end
