@@ -5,13 +5,21 @@ module Jenkinsrc
         attr_reader :projects_to_build, :condition, :trigger_with_no_params, :configs
 
         def initialize(dom)
-          @projects_to_build = dom.at_xpath('projects').text.split(',')
-          @condition = dom.at_xpath('condition').text
-          @trigger_with_no_params = dom.at_xpath('triggerWithNoParameters').text == 'true'
-          @configs = []
-          dom.at_xpath('configs').children.each do |child|
-            next unless child.type == 1
-            @configs << Jenkinsrc.constantize(child.name).new(child)
+          if dom.respond_to?(:at_xpath)
+            @projects_to_build = dom.at_xpath('projects').text.split(',')
+            @condition = dom.at_xpath('condition').text
+            @trigger_with_no_params = dom.at_xpath('triggerWithNoParameters').text == 'true'
+            @configs = []
+            dom.at_xpath('configs').children.each do |child|
+              next unless child.type == 1
+              @configs << Jenkinsrc.constantize(child.name).new(child)
+            end
+          else
+            @projects_to_build = dom['projects'].split(',')
+            @condition = dom['condition']
+            @trigger_with_no_params = dom['triggerWithNoParameters'] == true
+            @configs = []
+            @configs << Jenkinsrc::Plugins::Parameterizedtrigger::FileBuildParameters.new(dom)
           end
         end
 

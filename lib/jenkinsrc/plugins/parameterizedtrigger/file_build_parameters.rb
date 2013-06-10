@@ -5,7 +5,11 @@ module Jenkinsrc
         attr_reader :properties_file
 
         def initialize(dom)
-          @properties_file = dom.at_xpath('propertiesFile').text
+          if dom.respond_to?(:at_xpath)
+            @properties_file = dom.at_xpath('propertiesFile').text
+          else
+            @properties_file = dom['file_build_parameters']
+          end
         end
 
         def to_xml(builder)

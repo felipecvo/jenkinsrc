@@ -6,9 +6,13 @@ module Jenkinsrc
 
         def initialize(dom)
           @triggers = []
-          dom.xpath('configs').each do |child|
-            next if child.type != 1
-            @triggers << BuildTriggerConfig.new(child.at_xpath('hudson.plugins.parameterizedtrigger.BuildTriggerConfig'))
+          if dom.respond_to?(:at_xpath)
+            dom.xpath('configs').each do |child|
+              next if child.type != 1
+              @triggers << BuildTriggerConfig.new(child.at_xpath('hudson.plugins.parameterizedtrigger.BuildTriggerConfig'))
+            end
+          else
+            @triggers << BuildTriggerConfig.new(dom)
           end
         end
 
